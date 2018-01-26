@@ -8,30 +8,38 @@ use App\Posts;
 class PostsController extends Controller
 {
 
-    public function index()
-    {
+	public function index()
+	{
 
-    	$posts = Posts::all();
+		$posts = Posts::all();
 
-    	return view('posts.index', compact('posts'));
-    }
-
-
-    public function create()
-    {
-
-    	return view('posts.create');
-
-    }
+		return view('posts.index', compact('posts'));
+	}
 
 
+	public function create()
+	{
 
-    public function store()
-    {
+		return view('posts.create');
 
-    	Posts::create(request(['title', 'body']));
+	}
 
-    	return redirect('/');
 
-    }
+
+	public function store()
+	{
+
+		$this->validate(request(), [
+
+			'title' => 'required',
+
+			'body' => 'required'
+
+		]);
+
+		Posts::create(request(['title', 'body']));
+
+		return redirect('/');
+
+	}
 }
