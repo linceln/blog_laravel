@@ -1,0 +1,35 @@
+version: "3"
+services:
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./blog:/var/www/html/blog
+      - ./conf.d:/etc/nginx/conf.d
+      - ./log/nginx:/var/log/nginx
+    restart: always
+    networks:
+      - webnet
+  php:
+    image: lince/php:7-fpm
+    volumes:
+      - ./blog:/var/www/html/blog
+    restart: always
+    networks:
+      - webnet
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+     - ./mysql:/var/lib/mysql
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=zxcvbnm
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb_use_native_aio=0
+    networks:
+      - webnet
+networks:
+  webnet:
