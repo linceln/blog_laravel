@@ -20,7 +20,7 @@
 		
 		<ul class="list-group">
 
-			@foreach($post->comments as $comment)
+			@foreach($post->comments()->latest()->get() as $comment)
 
 				<li class="list-group-item">
 

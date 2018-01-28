@@ -8,12 +8,28 @@ use App\Post;
 class PostController extends Controller
 {
 
+	public function __construct()
+	{
+
+		$this->middleware('auth')->except('index', 'show');
+
+	}
+
 	public function index()
 	{
 
-		$posts = Post::latest()->get();
+		$posts = Post::with('comments')->latest()->get();
 
 		return view('posts.index', compact('posts'));
+	}
+
+
+
+	public function show(Post $post)
+	{
+
+		return view('posts.detail', compact('post'));
+
 	}
 
 
@@ -39,14 +55,6 @@ class PostController extends Controller
 		Post::create(request(['title', 'body']));
 
 		return redirect('/');
-
-	}
-
-
-	public function show(Post $post)
-	{
-
-		return view('posts.detail', compact('post'));
 
 	}
 
