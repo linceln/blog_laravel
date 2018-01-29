@@ -8,6 +8,6 @@
 
 </h2>
 
-<p class="blog-post-meta">{{ $post->created_at->toDateTimeString() }} by <a href="#">Mark(Hardcoded)</a></p>
+<p class="blog-post-meta"><a href="#">{{ $post->user->name }}</a> {{ $post->created_at->toDateTimeString() }}</p>
 
 {{ $post->body }}

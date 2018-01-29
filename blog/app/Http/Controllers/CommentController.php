@@ -9,6 +9,14 @@ use App\Comment;
 class CommentController extends Controller
 {
 
+	public function __construct()
+	{
+
+		$this->middleware('auth');
+
+	}
+
+
 	public function store(Post $post)
 	{
 
@@ -19,7 +27,13 @@ class CommentController extends Controller
 		]);
 
 
-		$post->addComment(request('comment'));
+		$post->addComment([
+
+			'content' => request('comment'),
+
+			'user_id' => auth()->id()
+
+		]);
 
 
 		return back();

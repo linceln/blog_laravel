@@ -13,7 +13,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
+        // 设置时间语言格式为中文
+
+        \Carbon\Carbon::setLocale('zh');
+
+        // View Composer 为所有 sidebar 传输数据 archives
+
+        view()->composer('layouts.sidebar', function($view){
+
+            $view->with('archives', \App\Post::archives());
+
+        });
     }
 
     /**
@@ -23,6 +34,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        
     }
 }

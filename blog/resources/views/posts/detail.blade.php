@@ -1,18 +1,18 @@
 @extends('layouts.master')
 
 @section('content')
-	
-	
+
+
 <div class="col-sm-8 blog-main">
 	
 
 	<h2 class="blog-post-title">{{ $post->title }}</h2>
 
-	<p class="blog-post-meta">{{ $post->created_at->toDateTimeString() }}</p>
+	<p class="blog-post-meta"><a href="#">{{ $post->user->name }}</a> {{ $post->created_at->toDateTimeString() }}</p>
 
 	{{ $post->body }}
 
-
+s
 	<hr>
 
 
@@ -22,19 +22,21 @@
 
 			@foreach($post->comments()->latest()->get() as $comment)
 
-				<li class="list-group-item">
+			<li class="list-group-item">
 
-					{{ $comment->content }}
+				<p>
+					<a href="#">{{ $comment->user->name }}</a>：{{ $comment->content }}
+				</p>
 
-					<hr>
+				<hr>
 
-					<strong>
-						
-						{{ $comment->created_at->diffForHumans() }}
+				<strong>
 
-					</strong>
+					{{ $comment->created_at->diffForHumans() }}
 
-				</li>
+				</strong>
+
+			</li>
 
 			@endforeach
 

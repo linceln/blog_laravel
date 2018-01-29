@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\User;
-
 class SessionController extends Controller
 {
 
@@ -39,7 +35,11 @@ class SessionController extends Controller
 
 		if(!auth()->attempt(request(['email', 'password']))){
 
-			return back();
+			return back()->withErrors([
+
+				'message' => "帐号或密码错误"
+
+			]);
 
 		}
 

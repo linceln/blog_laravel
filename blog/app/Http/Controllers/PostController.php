@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Post;
 
 class PostController extends Controller
@@ -18,7 +19,14 @@ class PostController extends Controller
 	public function index()
 	{
 
-		$posts = Post::with('comments')->latest()->get();
+		$posts = Post::with('comments')
+
+		->latest()
+
+		->filter(request(['month', 'year']))
+
+		->get();
+
 
 		return view('posts.index', compact('posts'));
 	}
@@ -44,6 +52,8 @@ class PostController extends Controller
 	public function store()
 	{
 
+		// Validate
+
 		$this->validate(request(), [
 
 			'title' => 'required',
@@ -52,7 +62,12 @@ class PostController extends Controller
 
 		]);
 
-		Post::create(request(['title', 'body']));
+
+		// Create a post
+
+		auth()->user()->publish(new Post(request(['title', 'body'])));
+		
+
 
 		return redirect('/');
 

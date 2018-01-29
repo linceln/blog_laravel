@@ -44,10 +44,12 @@ class RegistrationController extends Controller
 			'password' => bcrypt(request('password'))
 
 		]);
+		
 
 		// Login user
 
 		auth()->login($user);
+
 
 		// Redirect to home page
 
