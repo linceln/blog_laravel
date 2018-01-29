@@ -12,7 +12,7 @@ class SessionController extends Controller
 	public function __construct()
 	{
 
-		$this->middleware('guest');
+		$this->middleware('guest')->except('destroy');
 
 	}
 
@@ -53,6 +53,7 @@ class SessionController extends Controller
 	{
 
 		auth()->logout();
+
 
 		return redirect('/');
 

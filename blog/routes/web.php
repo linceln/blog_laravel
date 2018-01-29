@@ -11,7 +11,7 @@ Route::get('/login', 'SessionController@create');
 
 Route::post('/login', 'SessionController@store');
 
-Route::get('/logout', 'SessionController@destroy'); // TODO Should be POST.
+Route::get('/logout', 'SessionController@destroy'); // TODO: Should be POST.
 
 
 // Post and Comment
