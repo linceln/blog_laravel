@@ -6,6 +6,8 @@
 
   <div class="blog-post">
 
+    <strong>{{ $visits }}</strong>
+
     @foreach($posts as $post)
 
       @include('posts.post')

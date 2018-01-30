@@ -1,6 +1,5 @@
 <?php
 
-
 // User and Auth
 
 Route::get('/register', 'RegistrationController@create');
@@ -15,6 +14,10 @@ Route::get('/logout', 'SessionController@destroy'); // TODO: Should be POST.
 
 
 // Post and Comment
+
+Route::get('/', function(){
+	return \Illuminate\Support\Facades\Redis::incr('visits');
+});
 
 Route::get('/', 'PostController@index');
 

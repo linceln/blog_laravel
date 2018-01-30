@@ -1,3 +1,5 @@
 log
-
 mysql
+redis
+.DS_Store
+.idea
