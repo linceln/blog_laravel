@@ -1,21 +1,14 @@
 @extends('layouts.master')
 
-
 @section('content')
 <div class="col-sm-8 blog-main">
-
   <div class="blog-post">
 
-    <strong>{{ $visits }}</strong>
-
     @foreach($posts as $post)
-
       @include('posts.post')
-
       <hr>
-
     @endforeach
-
+    
   </div>
 
   <nav class="blog-pagination">

@@ -15,10 +15,6 @@ Route::get('/logout', 'SessionController@destroy'); // TODO: Should be POST.
 
 // Post and Comment
 
-Route::get('/', function(){
-	return \Illuminate\Support\Facades\Redis::incr('visits');
-});
-
 Route::get('/', 'PostController@index');
 
 Route::get('/posts', 'PostController@index');
@@ -30,4 +26,8 @@ Route::post('/posts', 'PostController@store');
 Route::get('/posts/{post}', 'PostController@show');
 
 Route::post('/posts/{post}/comments', 'CommentController@store');
+
+// Tags
+
+
 

@@ -1,13 +1,19 @@
 <h2 class="blog-post-title">
 
-  <a href="/posts/{{ $post->id }}" >
+	<a href="/posts/{{ $post->id }}" >
 
-    {{ $post->title }}
-    
-  </a>
+		{{ $post->title }}
+
+	</a>
 
 </h2>
 
-<p class="blog-post-meta"><a href="#">{{ $post->user->name }}</a> {{ $post->created_at->toDateTimeString() }}</p>
+<p class="blog-post-meta">
+	<a href="#">{{ $post->user->name }}</a> 
+	{{ $post->created_at->toDateTimeString() }}
+	@foreach ($post->tags as $tag)
+	<span class="badge badge-pill badge-success">{{ $tag->name }}</span>
+	@endforeach
+</p>
 
 {{ $post->body }}

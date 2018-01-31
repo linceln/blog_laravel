@@ -4,7 +4,6 @@ namespace App;
 
 use Carbon\Carbon;
 
-
 class Post extends Model
 {
 	public function comments()
@@ -12,10 +11,14 @@ class Post extends Model
 		return $this->hasMany(Comment::class);
 	}
 
-
 	public function user()
 	{
 		return $this->belongsTo(User::class);
+	}
+
+	public function tags()
+	{
+		return $this->belongsToMany(Tag::class);
 	}
 
 
@@ -33,6 +36,12 @@ class Post extends Model
 
 		if(isset($filters['year']) && $year = $filters['year']){
 			$query->whereYear('created_at', $year);
+		}
+
+		if(isset($filters['tag']) && $tag = $filters['tag']){
+			$query->whereHas('tags', function($query) use($tag){
+				$query->where('name', $tag);
+			});
 		}
 	}
 

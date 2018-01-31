@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Tag;
+
 class PostController extends Controller
 {
 	public function __construct()
@@ -14,14 +16,14 @@ class PostController extends Controller
 	
 	public function index()
 	{
-		$visits = Redis::incr('visits');
+		Redis::incr('visits');
 
 		$posts = Post::with('comments', 'user')
 		->latest()
-		->filter(request(['month', 'year']))
+		->filter(request(['month', 'year', 'tag']))
 		->get();
 
-		return view('posts.index', compact(['posts', 'visits']));
+		return view('posts.index', compact('posts'));
 	}
 
 
@@ -44,8 +46,19 @@ class PostController extends Controller
 			'title' => 'required',
 			'body' => 'required'
 		]);
+		
 		// Create a post
-		auth()->user()->publish(new Post(request(['title', 'body'])));
+		$post = auth()->user()->publish(new Post(request(['title', 'body'])));
+
+		// Attach tags to post
+		foreach (array_filter(explode(',', request('tags')), 'strlen') as $tag_name) {
+			$tag = Tag::updateOrCreate(['name' => $tag_name,]);
+			if(!$tag->wasRecentlyCreated){
+				$tag->increment('count');
+			}
+			$post->tags()->attach($tag);
+		}
+
 		return redirect('/');
 	}
 }

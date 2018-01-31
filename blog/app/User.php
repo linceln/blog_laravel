@@ -31,24 +31,19 @@ class User extends Authenticatable
 
     public static function register($user)
     {
-
         static::create($user);
-
     }
 
 
     public function posts()
     {
-
         return $this->hasMany(Post::class);
-
     }
 
 
     public function publish(Post $post)
     {
-
         $this->posts()->save($post);
-
+        return $post;
     }
 }
