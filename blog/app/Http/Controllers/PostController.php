@@ -1,10 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Tag;
+use Illuminate\Database\QueryException;
 
 class PostController extends Controller
 {
@@ -18,7 +20,7 @@ class PostController extends Controller
 	{
 		Redis::incr('visits');
 
-		$posts = Post::with('user', 'tags')
+		$posts = Post::with('user:id,name', 'tags:id,name')
 		->latest()
 		->filter(request(['month', 'year', 'tag']))
 		->get();
@@ -32,8 +34,7 @@ class PostController extends Controller
 		$post = Post::with([
 			'user:id,name',
 			'comments' => function($query){
-				$query->with('user:id,name')
-				->latest();
+				$query->with('user:id,name')->latest();
 			}])
 		->find($id);
 
@@ -55,16 +56,18 @@ class PostController extends Controller
 			'body' => 'required'
 		]);
 		
-		// Create a post
-		$post = auth()->user()->publish(new Post(request(['title', 'body'])));
+		DB::transaction(function () {
+			// Create a post
+			$post = auth()->user()->publish(new Post(request(['title', 'body'])));
 
-		// Attach tags to the post
-		foreach (array_filter(explode(',', request('tags')), 'strlen') as $tag_name) {
-			$post->attachToTag($tag_name);
-		}
-
-		// Flash message
-		session()->flash('msg', "Your post has now been published!");
+			// Attach tags to the post
+			foreach (array_filter(explode(',', request('tags')), 'strlen') as $tag_name) {
+				$post->attachToTag($tag_name);
+			}
+			
+			// Flash message
+			session()->flash('msg', "Your post has now been published!");
+		}, 5);
 
 		return redirect('/');
 	}
