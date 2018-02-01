@@ -33,8 +33,7 @@ class SessionController extends Controller
 		// Flash message
 		session()->flash('msg', 'Thank you for signing in!');
 
-		return redirect('/');
-
+		return back();
 	}
 
 
