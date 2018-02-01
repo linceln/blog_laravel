@@ -12,10 +12,12 @@ class Post extends Model
 		return $this->hasMany(Comment::class);
 	}
 
+
 	public function user()
 	{
 		return $this->belongsTo(User::class);
 	}
+
 
 	public function tags()
 	{
@@ -44,6 +46,16 @@ class Post extends Model
 				$query->where('name', $tag);
 			});
 		}
+	}
+
+
+	public function attachToTag($tag_name)
+	{
+		$tag = Tag::updateOrCreate(['name' => $tag_name,]);
+		if(!$tag->wasRecentlyCreated){
+			$tag->increment('count');
+		}
+		$this->tags()->attach($tag);
 	}
 
 

@@ -11,7 +11,7 @@
 
 	<div class="comments">
 		<ul class="list-group">
-			@foreach($post->comments()->latest()->get() as $comment)
+			@foreach($post->comments as $comment)
 			<li class="list-group-item">
 				<p>
 					<a href="#">{{ $comment->user->name }}</a>：{{ $comment->content }}

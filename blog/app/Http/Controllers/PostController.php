@@ -18,7 +18,7 @@ class PostController extends Controller
 	{
 		Redis::incr('visits');
 
-		$posts = Post::with('comments', 'user')
+		$posts = Post::with('user', 'tags')
 		->latest()
 		->filter(request(['month', 'year', 'tag']))
 		->get();
@@ -27,8 +27,16 @@ class PostController extends Controller
 	}
 
 
-	public function show(Post $post)
+	public function show($id)
 	{
+		$post = Post::with([
+			'user:id,name',
+			'comments' => function($query){
+				$query->with('user:id,name')
+				->latest();
+			}])
+		->find($id);
+
 		return view('posts.detail', compact('post'));
 	}
 
@@ -50,14 +58,13 @@ class PostController extends Controller
 		// Create a post
 		$post = auth()->user()->publish(new Post(request(['title', 'body'])));
 
-		// Attach tags to post
+		// Attach tags to the post
 		foreach (array_filter(explode(',', request('tags')), 'strlen') as $tag_name) {
-			$tag = Tag::updateOrCreate(['name' => $tag_name,]);
-			if(!$tag->wasRecentlyCreated){
-				$tag->increment('count');
-			}
-			$post->tags()->attach($tag);
+			$post->attachToTag($tag_name);
 		}
+
+		// Flash message
+		session()->flash('msg', "Your post has now been published!");
 
 		return redirect('/');
 	}
