@@ -41,5 +41,14 @@ services:
     restart: always
     networks:
       - webnet
+  # node:
+  #   image: node:alpine
+  #   working_dir: /blog
+  #   volumes:
+  #     - ./blog:/blog
+  #   restart: always
+  #   command: "npm start"
+  #   networks:
+  #     - webnet
 networks:
   webnet:
