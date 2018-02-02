@@ -14,18 +14,21 @@ class PostController extends Controller
 	{
 		$this->middleware('auth')->except('index', 'show');
 	}
-	
-	
+
+
 	public function index()
 	{
 		Redis::incr('visits');
 
+		$params = request(['month', 'year', 'tag']);
+		$param = Post::getAppendParamString($params);
+		
 		$posts = Post::with('user:id,name', 'tags:id,name')
 		->latest()
-		->filter(request(['month', 'year', 'tag']))
-		->get();
+		->filter($params)
+		->paginate(10);
 
-		return view('posts.index', compact('posts'));
+		return view('posts.index', compact('posts', 'param'));
 	}
 
 

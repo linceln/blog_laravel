@@ -1,10 +1,8 @@
-<h2 class="blog-post-title">
-
+<h5>
 	<a href="/posts/{{ $post->id }}" >
 		{{ $post->title }}
 	</a>
-
-</h2>
+</h5>
 
 <p class="blog-post-meta">
 	<a href="#">{{ $post->user->name }}</a> 

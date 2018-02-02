@@ -58,6 +58,23 @@ class Post extends Model
 		$this->tags()->attach($tag);
 	}
 
+	public static function getAppendParamString($params)
+	{
+		$param = '';
+
+		if(isset($params['tag'])){
+			$param .= '&tag=' . $params['tag'];
+		}
+		if(isset($params['year'])){
+			$param .= '&year=' . $params['year'];
+		}
+		if(isset($params['month'])){
+			$param .= '&month=' . $params['month'];
+		}
+
+		return $param;
+	}
+
 
 	public static function archives()
 	{
