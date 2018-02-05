@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -28,7 +28,7 @@ class PostController extends Controller
 		->filter($params)
 		->paginate(10);
 
-		return view('posts.index', compact('posts', 'param'));
+		return $posts;
 	}
 
 
