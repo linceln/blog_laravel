@@ -39,7 +39,12 @@ class SessionController extends Controller
 
 	public function destroy()
 	{
+		// Logout
 		auth()->logout();
+
+		// Flash message
+		session()->flash('msg', 'You have successfully logout!');
+
 		return redirect('/');
 	}
 }

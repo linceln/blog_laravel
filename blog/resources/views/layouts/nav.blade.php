@@ -13,7 +13,13 @@
       <div class="col-sm-4 blog-main">
         <nav class="nav blog-nav justify-content-end">
           @if(auth()->check())
-          <a class="nav-link" href="/logout">{{ auth()->user()->name }}</a>
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ auth()->user()->name }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Profile</a>
+            <a class="dropdown-item" href="/logout">Logout</a>
+          </div>
           @else
           <a class="nav-link" href="/login">SIGN IN</a>
           <a class="nav-link" href="/register">SIGN UP</a>
