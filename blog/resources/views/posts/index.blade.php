@@ -24,13 +24,6 @@
       <li class="page-item"><a class="page-link" href="/?page={{ $i + 1 }}{{ $param }}">{{ $i + 1  }}</a></li>
       @endfor
 
-      <li class="page-item">
-        <a class="page-link" aria-label="Next" href="{{ $posts->nextPageUrl() }}">
-          <span aria-hidden="true">&raquo;</span>
-          <span class="sr-only">Next</span>
-        </a>
-      </li>
-
     </ul>
   </nav>
 
