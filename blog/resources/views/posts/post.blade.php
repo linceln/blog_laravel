@@ -6,7 +6,7 @@
 
 <p class="blog-post-meta">
 	<a href="#">{{ $post->user->name }}</a> 
-	{{ $post->created_at->toDateTimeString() }}
+	{{ $post->created_at->toDateString() }}
 	@foreach ($post->tags as $tag)
 	<span class="badge badge-pill badge-success">{{ $tag->name }}</span>
 	@endforeach

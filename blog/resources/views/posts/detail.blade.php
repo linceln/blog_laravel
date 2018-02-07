@@ -5,7 +5,7 @@
 <div class="col-sm-8 blog-main">
 
 	<h5>{{ $post->title }}</h5>
-	<p class="blog-post-meta"><a href="#">{{ $post->user->name }}</a> {{ $post->created_at->toDateTimeString() }}</p>
+	<p class="blog-post-meta"><a href="#">{{ $post->user->name }}</a> {{ $post->created_at->toDateString() }}</p>
 	{{ $post->body }}
 	<hr>
 

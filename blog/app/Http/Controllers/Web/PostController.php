@@ -67,7 +67,7 @@ class PostController extends Controller
 			foreach (array_filter(explode(',', request('tags')), 'strlen') as $tag_name) {
 				$post->attachToTag($tag_name);
 			}
-			
+		
 			// Flash message
 			session()->flash('msg', "Your post has now been published!");
 		}, 5);

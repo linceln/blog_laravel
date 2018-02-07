@@ -13,6 +13,6 @@ class Tag extends Model
 
     public static function tags()
     {
-    	return static::has('posts')->orderBy('name', 'asc')->pluck('name');
+    	return static::has('posts')->orderBy('count', 'desc')->limit(10)->pluck('name');
     }
 }
