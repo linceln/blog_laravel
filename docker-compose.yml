@@ -7,7 +7,7 @@ services:
     volumes:
       - ./blog:/var/www/html/blog:cached
       - ./conf.d:/etc/nginx/conf.d:cached
-      - ./log/nginx:/var/log/nginx:cached
+      - nginx:/var/log/nginx:cached
     restart: always
     networks:
       - webnet
@@ -23,7 +23,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-     - ./mysql:/var/lib/mysql:cached
+     - mysql:/var/lib/mysql:cached
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -36,7 +36,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./redis/data:/data:cached
+      - redis:/data:cached
     command: redis-server --appendonly yes
     restart: always
     networks:
@@ -52,3 +52,7 @@ services:
   #     - webnet
 networks:
   webnet:
+volumes:
+  mysql:
+  redis:
+  nginx:
