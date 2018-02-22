@@ -48,6 +48,11 @@ class Post extends Model
 		}
 	}
 
+	public function scopeIsPublic($query)
+	{
+		$query->where('public', 1);
+	}
+
 
 	public function attachToTag($tag_name)
 	{
@@ -81,6 +86,7 @@ class Post extends Model
 		return static::selectRaw('year(created_at) year,monthname(created_at) month,count(*) published')
 		->groupBy('year', 'month')
 		->orderByRaw('min(created_at) desc')
+		->isPublic()
 		->get();
 	}
 }

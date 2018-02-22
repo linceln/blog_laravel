@@ -25,8 +25,9 @@
 		</ul>
 	</div>
 
-	<hr>
 
+	@can('create', App\Comment::class)
+	<hr>
 	<form method="POST" action="/posts/{{ $post->id }}/comments">
 
 		{{ csrf_field() }}
@@ -42,6 +43,8 @@
 		@include('layouts.error')
 		
 	</form>
+	@endcan
+
 </div>
 
 @endsection

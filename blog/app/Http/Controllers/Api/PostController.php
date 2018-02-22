@@ -18,12 +18,17 @@ class PostController extends Controller
 
 	public function index()
 	{
-		Redis::incr('visits');
-
 		$params = request(['month', 'year', 'tag']);
 		$param = Post::getAppendParamString($params);
+
+		// Visits
+		dd($params);
+		if(empty($params)){
+			Redis::incr('visits');
+		}
 		
 		$posts = Post::with('user:id,name', 'tags:id,name')
+		->isPublic()
 		->latest()
 		->filter($params)
 		->paginate(10);
@@ -41,18 +46,15 @@ class PostController extends Controller
 			}])
 		->find($id);
 
-		return view('posts.detail', compact('post'));
-	}
-
-
-	public function create()
-	{
-		return view('posts.create');
+		return $post;
 	}
 
 
 	public function store()
 	{
+		// Authorize
+		$this->authorize('create', Post::class);
+
 		// Validate
 		$this->validate(request(), [
 			'title' => 'required',
@@ -67,11 +69,11 @@ class PostController extends Controller
 			foreach (array_filter(explode(',', request('tags')), 'strlen') as $tag_name) {
 				$post->attachToTag($tag_name);
 			}
-			
-			// Flash message
-			session()->flash('msg', "Your post has now been published!");
 		}, 5);
 
-		return redirect('/');
+		return [
+			'code' => 1,
+			'msg' => 'Success'
+		];
 	}
 }
