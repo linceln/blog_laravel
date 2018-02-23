@@ -9,6 +9,11 @@ use App\User;
 class RegistrationController extends Controller
 {
 
+	public function __construct()
+	{
+		$this->middleware('guest');
+	}
+
 	public function create()
 	{
 		return view('registration.create');
@@ -20,7 +25,7 @@ class RegistrationController extends Controller
 		// Validate input 
 		$this->validate(request(), [
 			'name' => 'required|min:6',
-			'email' => 'required|email',
+			'email' => 'bail|required|email|unique:users',
 			'password' => 'required|min:6|confirmed'
 		]);
 
