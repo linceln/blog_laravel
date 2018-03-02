@@ -3,30 +3,22 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Http\Request;
 use App\Post;
-use App\Tag;
-use Illuminate\Database\QueryException;
 
 class PostController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth')->except('index', 'show');
+		$this->middleware('auth:api')->except('index', 'show');
 	}
 
 
 	public function index()
 	{
-		$params = request(['month', 'year', 'tag']);
-		$param = Post::getAppendParamString($params);
-
-		// Visits
-		dd($params);
-		if(empty($params)){
-			Redis::incr('visits');
-		}
+		Redis::incr('visits');
 		
+		$params = request(['month', 'year', 'tag']);
+
 		$posts = Post::with('user:id,name', 'tags:id,name')
 		->isPublic()
 		->latest()

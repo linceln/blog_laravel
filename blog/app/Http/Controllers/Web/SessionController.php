@@ -24,16 +24,14 @@ class SessionController extends Controller
 		]);
 
 
-		if(!auth()->attempt(request(['email', 'password']))){
+		if(auth()->attempt(request(['email', 'password']))){	
+			session()->flash('msg', 'Thank you for signing in!');
+			return redirect()->intended(route('login'));	
+		} else {
 			return back()->withErrors([
 				'message' => "帐号或密码错误"
 			]);
-		}
-
-		// Flash message
-		session()->flash('msg', 'Thank you for signing in!');
-
-		return redirect()->intended(route('login'));
+		} 
 	}
 
 
