@@ -56,6 +56,11 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
+    public function refresh()
+    {
+        return responseWithToken(auth()->guard('api')->refresh());       
+    }
+
     private function responseWithToken($token)
     {
         return response()->json([
