@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class Post extends Model
 {
@@ -83,10 +84,17 @@ class Post extends Model
 
 	public static function archives()
 	{
-		return static::selectRaw('year(created_at) year,monthname(created_at) month,count(*) published')
+		return $archives = static::selectRaw('year(created_at) year,monthname(created_at) month,count(*) published')
 		->groupBy('year', 'month')
 		->orderByRaw('min(created_at) desc')
 		->isPublic()
 		->get();
+	}
+
+	public static function archivesCached()
+	{
+		return Cache::remember('posts.archives', 14400, function () { // 10 days
+			return static::archives();
+		});
 	}
 }

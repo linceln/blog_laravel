@@ -21,8 +21,8 @@ class AppServiceProvider extends ServiceProvider
 
         // View Composer 为所有 sidebar 传输数据 archives
         view()->composer('layouts.sidebar', function($view){
-            $archives = Post::archives();
-            $tags = Tag::tags();
+            $archives = Post::archivesCached();
+            $tags = Tag::tagsCached();
         
             $view->with(compact('archives', 'tags'));
         });
