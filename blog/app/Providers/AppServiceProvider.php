@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Post;
 use App\Tag;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Http\Resources\Json\Resource;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('layouts.nav', function($view){
             $view->with('visits', Redis::get('visits'));
         });
+
+        Resource::withoutWrapping();
     }
 
     /**
