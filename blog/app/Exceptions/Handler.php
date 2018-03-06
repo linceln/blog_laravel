@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\ApiException;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -49,14 +51,37 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        if ($request->wantsJson()){
+            return $this->handleApiException($request, $exception);
+        } else {
+            return parent::render($request, $exception);
+        }
+    }
+
+    private function handleApiException($request, Exception $exception)
+    {
+        if ($exception instanceof ApiException) {
+                return response()->json([
+                   'code' => 0,
+                   'message' => $exception->getMessage()
+               ], 200);
+            } else if ($exception instanceof ValidationException) {
+                return response()->json([
+                    'code' => 0,
+                    'message' => $exception->getMessage
+                ], 200);
+            } else {
+                return response()->json([
+
+                ]);
+            }
     }
 
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         return $request->expectsJson()
-                    ? response()->json(['message' => $exception->getMessage()], 401)
-                    : redirect()->guest('login');
+        ? response()->json(['message' => $exception->getMessage()], 401)
+        : redirect()->guest('login');
     }
 }
