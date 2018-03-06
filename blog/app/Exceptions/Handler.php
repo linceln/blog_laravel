@@ -5,8 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use App\Exceptions\ApiException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -34,7 +34,7 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
      * @return void
      */
     public function report(Exception $exception)
@@ -45,13 +45,13 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Exception $exception
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {
-        if ($request->wantsJson()){
+        if ($request->wantsJson()) {
             return $this->handleApiException($request, $exception);
         } else {
             return parent::render($request, $exception);
@@ -61,27 +61,28 @@ class Handler extends ExceptionHandler
     private function handleApiException($request, Exception $exception)
     {
         if ($exception instanceof ApiException) {
-                return response()->json([
-                   'code' => 0,
-                   'message' => $exception->getMessage()
-               ], 200);
-            } else if ($exception instanceof ValidationException) {
-                return response()->json([
-                    'code' => 0,
-                    'message' => $exception->getMessage
-                ], 200);
-            } else {
-                return response()->json([
+            return response()->json([
+                'code' => 0,
+                'message' => $exception->getMessage()
+            ], 200);
 
-                ]);
-            }
+        } else if ($exception instanceof ModelNotFoundException) {
+            return response()->json([
+                'message' => 'Resource not found'
+            ], 404);
+        } else if ($exception instanceof ValidationException) {
+
+            return response()->json([
+                'message' => current(current($exception->errors()))
+            ], $exception->status);
+        }
     }
 
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         return $request->expectsJson()
-        ? response()->json(['message' => $exception->getMessage()], 401)
-        : redirect()->guest('login');
+            ? response()->json(['message' => $exception->getMessage()], 401)
+            : redirect()->guest('login');
     }
 }
