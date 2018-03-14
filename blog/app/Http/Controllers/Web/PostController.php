@@ -3,10 +3,7 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Http\Request;
 use App\Post;
-use App\Tag;
-use Illuminate\Database\QueryException;
 
 class PostController extends Controller
 {

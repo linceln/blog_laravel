@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use App\Post;
-use App\User;
 use App\Http\Resources\PostResource;
-use App\Http\Resources\UserResource;
 
 class PostController extends Controller
 {
@@ -19,7 +17,7 @@ class PostController extends Controller
 	public function index()
 	{
 		Redis::incr('visits');
-		
+
 		$params = request(['month', 'year', 'tag']);
 
 		$posts = Post::with('user', 'tags')

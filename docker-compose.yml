@@ -4,7 +4,9 @@ services:
     image: nginx
     ports:
       - "80:80"
+      - "8000:8000"
     volumes:
+      - ./project:/var/www/html/test:cached
       - ./blog:/var/www/html/blog:cached
       - ./conf.d:/etc/nginx/conf.d:cached
       - nginx:/var/log/nginx:cached
@@ -14,7 +16,9 @@ services:
   php:
     image: lince/php:7-fpm
     volumes:
+      - ./project:/var/www/html/test:cached
       - ./blog:/var/www/html/blog:cached
+      - ./php.ini:/usr/local/etc/php/php.ini:cached
     restart: always
     networks:
       - webnet
@@ -41,15 +45,6 @@ services:
     restart: always
     networks:
       - webnet
-  # node:
-  #   image: node:alpine
-  #   working_dir: /blog
-  #   volumes:
-  #     - ./blog:/blog
-  #   restart: always
-  #   command: "npm start"
-  #   networks:
-  #     - webnet
 networks:
   webnet:
 volumes:
