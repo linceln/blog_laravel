@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use App\Post;
 use App\Tag;
@@ -18,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // 设置时间语言格式为中文
-        \Carbon\Carbon::setLocale('zh');
+        Carbon::setLocale('zh');
 
         // View Composer 为所有 sidebar 传输数据 archives
         view()->composer('layouts.sidebar', function($view){
