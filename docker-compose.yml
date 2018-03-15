@@ -6,12 +6,14 @@ services:
     image: nginx
     ports:
       - "80:80"
+      - "443:443"
       - "8000:8000"
     volumes:
       - ./project:/var/www/html/test:cached
       - ./blog:/var/www/html/blog:cached
       - ./conf.d:/etc/nginx/conf.d:cached
       - nginx:/var/log/nginx:cached
+      - /etc/letsencrypt/archive/lince.cc:/lince.cc:cached
     restart: always
     networks:
       - webnet
